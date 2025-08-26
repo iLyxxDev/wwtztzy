@@ -153,6 +153,28 @@
     white-space: pre-wrap;
     margin-top: 10px;
     }
+
+    .telegram-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 999;
+}
+
+.telegram-btn img {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #0088cc;
+  padding: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.telegram-btn img:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+}
   </style>
 </head>
 <body>
@@ -234,7 +256,7 @@
       fileUrl = `./mt/${files[randomIndex]}`;
     }
     if (choice === "2") {
-      const files = ["1.txt","2.txt","3.txt"];
+      const files = ["1.txt","2.txt","3.txt","4.txt","5.txt","6.txt","7.txt","8.txt","9.txt","10.txt"];
       const randomIndex = Math.floor(Math.random() * files.length);
       fileUrl = `./mt-unband/${files[randomIndex]}`;
     }
