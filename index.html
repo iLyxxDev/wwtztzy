@@ -203,29 +203,44 @@
   </div>
 
   <script>
-    // Simple client-side handling (demo)
-    const form = document.getElementById('mtForm');
-    const btn = document.getElementById('submitBtn');
+  const form = document.getElementById('mtForm');
+  const btn = document.getElementById('submitBtn');
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      btn.disabled = true;
-      btn.textContent = 'Mengirim...';
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    btn.textContent = 'CREATE MT...';
 
-      const payload = {
-        link: document.getElementById('link').value.trim(),
-        name: document.getElementById('name').value.trim(),
-        choice: document.getElementById('choice').value
-      };
+    const link = document.getElementById('link').value.trim();
+    const name = document.getElementById('name').value.trim();
+    const choice = document.getElementById('choice').value;
 
-      // Demo: tunjukkan data di alert. Ganti dengan fetch() ke API Anda.
-      setTimeout(() => {
-        alert('Data siap dikirim:\\n' + JSON.stringify(payload, null, 2));
-        btn.disabled = false;
-        btn.textContent = 'Kirim';
-        form.reset();
-      }, 700);
-    });
-  </script>
+    // bikin hasil teks
+    const resultText = `Hallo ini adalah ${link} link saya, dan nama saya adalah ${name}`;
+
+    setTimeout(() => {
+      // bikin elemen hasil
+      const resultBox = document.createElement('div');
+      resultBox.style.marginTop = "20px";
+      resultBox.style.padding = "14px";
+      resultBox.style.borderRadius = "12px";
+      resultBox.style.background = "rgba(255,255,255,0.08)";
+      resultBox.style.color = "#fff";
+      resultBox.style.fontSize = "15px";
+      resultBox.textContent = resultText;
+
+      // hapus hasil lama kalau ada
+      const oldResult = document.getElementById("resultBox");
+      if(oldResult) oldResult.remove();
+
+      resultBox.id = "resultBox";
+      form.after(resultBox);
+
+      btn.disabled = false;
+      btn.textContent = 'CREATEMT';
+      form.reset();
+    }, 700);
+  });
+  <script>
 </body>
 </html>
