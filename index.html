@@ -23,13 +23,31 @@
       --card-radius:16px;
     }
 
-    html,body{
+    html,body {
       height:100%;
       margin:0;
       font-family: 'Poppins', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: url("https://files.catbox.moe/8ibdmn.mp4") no-repeat center center fixed;
-      background-size: cover;
       color:#e6f7f2;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Video background */
+    #bg-video {
+      position: fixed;
+      top: 0;
+      left: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1; /* biar di belakang */
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 20px;
     }
 
     .wrap{
