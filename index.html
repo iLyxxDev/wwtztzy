@@ -214,93 +214,118 @@ h1 span{
   </div>
 
   <script>
-  const form = document.getElementById('mtForm');
-  const btn = document.getElementById('submitBtn');
+const form = document.getElementById('mtForm');
+const btn = document.getElementById('submitBtn');
 
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    btn.disabled = true;
-    btn.textContent = 'CREATE MT...';
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  btn.disabled = true;
+  btn.textContent = 'CREATE MT...';
 
-    const link = document.getElementById('link').value.trim();
-    const name = document.getElementById('name').value.trim();
-    const choice = document.getElementById('choice').value;
+  const link = document.getElementById('link').value.trim();
+  const name = document.getElementById('name').value.trim();
+  const choice = document.getElementById('choice').value;
 
-    // tentukan path file sesuai pilihan
-    let fileUrl = "";
-// misalnya untuk choice = "1"
-if (choice === "1") {
-  // list file yang tersedia di ./mt
-  const files = ["1.txt","2.txt","3.txt","4.txt","5.txt","6.txt","7.txt","8.txt","9.txt","10.txt"];
+  let fileUrl = "";
+  let resultText = "";
 
-  // ambil index random
-  const randomIndex = Math.floor(Math.random() * files.length);
+  try {
+    if (choice === "1") {
+      // random file di ./mt/
+      const files = ["1.txt","2.txt","3.txt","4.txt","5.txt","6.txt","7.txt","8.txt","9.txt","10.txt"];
+      const randomIndex = Math.floor(Math.random() * files.length);
+      fileUrl = `./mt/${files[randomIndex]}`;
 
-  // tentuin file hasil random
-  fileUrl = `./mt/${files[randomIndex]}`;
-}
+      const res = await fetch(fileUrl);
+      if (!res.ok) throw new Error("File tidak ditemukan");
+      let template = await res.text();
 
-if (choice === "2") fileUrl = "./mt/2.txt";
+      resultText = template
+        .replaceAll("{link}", link)
+        .replaceAll(/{name}/g, name);
+    }
 
-try {
-  const res = await fetch(fileUrl);
-  if (!res.ok) throw new Error("File tidak ditemukan");
-  let template = await res.text();
+    if (choice === "2") {
+      // random file di ./mt2/
+      const files = ["1.txt","2.txt","3.txt"];
+      const randomIndex = Math.floor(Math.random() * files.length);
+      fileUrl = `./mtun/${files[randomIndex]}`;
 
-  const resultText = template
-    .replaceAll("{link}", link)
-    .replaceAll(/{name}/g, name);
+      const res = await fetch(fileUrl);
+      if (!res.ok) throw new Error("File tidak ditemukan");
+      let template = await res.text();
 
-  const resultBox = document.createElement('div');
-  resultBox.style.marginTop = "20px";
-  resultBox.style.padding = "14px";
-  resultBox.style.borderRadius = "12px";
-  resultBox.style.background = "rgba(255,255,255,0.08)";
-  resultBox.style.color = "#fff";
-  resultBox.style.fontSize = "15px";
-  resultBox.style.whiteSpace = "pre-line";
-  resultBox.textContent = resultText;
+      const nomer = prompt("Masukkan nomer:") || "";
+      resultText = template.replaceAll(/{nomer}/g, nomer);
+    }
 
-  const oldResult = document.getElementById("resultWrapper");
-  if (oldResult) oldResult.remove();
+    if (choice === "3") {
+      // random file di ./mt3/
+      const files = ["1.txt","2.txt","3.txt"];
+      const randomIndex = Math.floor(Math.random() * files.length);
+      fileUrl = `./mtto/${files[randomIndex]}`;
 
-  const wrapper = document.createElement('div');
-  wrapper.id = "resultWrapper";
-  wrapper.appendChild(resultBox);
+      const res = await fetch(fileUrl);
+      if (!res.ok) throw new Error("File tidak ditemukan");
+      let template = await res.text();
 
-  const copyBtn = document.createElement('button');
-  copyBtn.textContent = "Salin Teks";
-  copyBtn.style.marginTop = "10px";
-  copyBtn.style.padding = "10px 14px";
-  copyBtn.style.border = "none";
-  copyBtn.style.borderRadius = "8px";
-  copyBtn.style.cursor = "pointer";
-  copyBtn.style.fontWeight = "600";
-  copyBtn.style.background = "linear-gradient(90deg, var(--accent1), var(--accent2))";
-  copyBtn.style.color = "#fff";
+      const nomer = prompt("Masukkan nomer:") || "";
+      resultText = template.replaceAll(/{nomer}/g, nomer);
+    }
 
-  copyBtn.onclick = () => {
-    navigator.clipboard.writeText(resultText)
-      .then(() => {
-        copyBtn.textContent = "✅ Disalin!";
-        setTimeout(() => copyBtn.textContent = "Salin Teks", 2000);
-      })
-      .catch(() => {
-        alert("Gagal menyalin teks.");
-      });
-  };
+    // bikin box hasil
+    const resultBox = document.createElement('div');
+    resultBox.style.marginTop = "20px";
+    resultBox.style.padding = "14px";
+    resultBox.style.borderRadius = "12px";
+    resultBox.style.background = "rgba(255,255,255,0.08)";
+    resultBox.style.color = "#fff";
+    resultBox.style.fontSize = "15px";
+    resultBox.style.whiteSpace = "pre-line";
+    resultBox.textContent = resultText;
 
-  wrapper.appendChild(copyBtn);
-  form.after(wrapper);
+    // hapus hasil lama kalau ada
+    const oldResult = document.getElementById("resultWrapper");
+    if (oldResult) oldResult.remove();
 
-} catch (err) {
-  alert("Gagal ambil template: " + err);
-}
+    // wrapper utk teks + tombol
+    const wrapper = document.createElement('div');
+    wrapper.id = "resultWrapper";
+    wrapper.appendChild(resultBox);
 
-btn.disabled = false;
-btn.textContent = 'CREATE MT';
-form.reset();
-  });
+    const copyBtn = document.createElement('button');
+    copyBtn.textContent = "Salin Teks";
+    copyBtn.style.marginTop = "10px";
+    copyBtn.style.padding = "10px 14px";
+    copyBtn.style.border = "none";
+    copyBtn.style.borderRadius = "8px";
+    copyBtn.style.cursor = "pointer";
+    copyBtn.style.fontWeight = "600";
+    copyBtn.style.background = "linear-gradient(90deg, var(--accent1), var(--accent2))";
+    copyBtn.style.color = "#fff";
+
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(resultText)
+        .then(() => {
+          copyBtn.textContent = "✅ Disalin!";
+          setTimeout(() => copyBtn.textContent = "Salin Teks", 2000);
+        })
+        .catch(() => {
+          alert("Gagal menyalin teks.");
+        });
+    };
+
+    wrapper.appendChild(copyBtn);
+    form.after(wrapper);
+
+  } catch (err) {
+    alert("Gagal ambil template: " + err);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'CREATE MT';
+  form.reset();
+});
   </script>
 </body>
 </html>
