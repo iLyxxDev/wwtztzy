@@ -188,7 +188,7 @@
 
           <div class="field">
             <select id="choice" required>
-              <option value="" disabled selected>-- Pilih MT 1 atau 2 --</option>
+              <option value="" disabled selected>-- MT --</option>
               <option value="1">1</option>
               <option value="2">2</option>
             </select>
@@ -206,7 +206,7 @@
   const form = document.getElementById('mtForm');
   const btn = document.getElementById('submitBtn');
 
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
     btn.disabled = true;
     btn.textContent = 'CREATE MT...';
@@ -215,11 +215,22 @@
     const name = document.getElementById('name').value.trim();
     const choice = document.getElementById('choice').value;
 
-    // bikin hasil teks
-    const resultText = `Hallo ini adalah ${link} link saya, dan nama saya adalah ${name}`;
+    // tentukan path file sesuai pilihan
+    let fileUrl = "";
+    if (choice === "1") fileUrl = "mtband/1.txt";
+    if (choice === "2") fileUrl = "mtbandtoperma/2.txt";
 
-    setTimeout(() => {
-      // bikin elemen hasil
+    try {
+      // ambil isi template
+      const res = await fetch(fileUrl);
+      let template = await res.text();
+
+      // replace placeholder {link} dan {name}
+      const resultText = template
+        .replace("{link}", link)
+        .replace("{name}", name);
+
+      // bikin box hasil
       const resultBox = document.createElement('div');
       resultBox.style.marginTop = "20px";
       resultBox.style.padding = "14px";
@@ -235,11 +246,13 @@
 
       resultBox.id = "resultBox";
       form.after(resultBox);
+    } catch (err) {
+      alert("Gagal ambil template: " + err);
+    }
 
-      btn.disabled = false;
-      btn.textContent = 'CREATEMT';
-      form.reset();
-    }, 700);
+    btn.disabled = false;
+    btn.textContent = 'CREATE MT';
+    form.reset();
   });
   </script>
 </body>
