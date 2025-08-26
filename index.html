@@ -239,21 +239,52 @@ h1 span{
       const resultText = template
         .replaceAll("{link}", link)
         .replaceAll("{name}", name);
-
+      
       // bikin box hasil
-      const resultBox = document.createElement('div');
-      resultBox.style.marginTop = "20px";
-      resultBox.style.padding = "14px";
-      resultBox.style.borderRadius = "12px";
-      resultBox.style.background = "rgba(255,255,255,0.08)";
-      resultBox.style.color = "#fff";
-      resultBox.style.fontSize = "15px";
-      resultBox.textContent = resultText;
+const resultBox = document.createElement('div');
+resultBox.style.marginTop = "20px";
+resultBox.style.padding = "14px";
+resultBox.style.borderRadius = "12px";
+resultBox.style.background = "rgba(255,255,255,0.08)";
+resultBox.style.color = "#fff";
+resultBox.style.fontSize = "15px";
+resultBox.style.whiteSpace = "pre-line"; // biar enter/line break ikut
+resultBox.textContent = resultText;
 
-      // hapus hasil lama kalau ada
-      const oldResult = document.getElementById("resultBox");
-      if(oldResult) oldResult.remove();
+// hapus hasil lama kalau ada
+const oldResult = document.getElementById("resultWrapper");
+if(oldResult) oldResult.remove();
 
+// wrapper utk teks + tombol
+const wrapper = document.createElement('div');
+wrapper.id = "resultWrapper";
+wrapper.appendChild(resultBox);
+
+// tombol salin
+const copyBtn = document.createElement('button');
+copyBtn.textContent = "Salin Teks";
+copyBtn.style.marginTop = "10px";
+copyBtn.style.padding = "10px 14px";
+copyBtn.style.border = "none";
+copyBtn.style.borderRadius = "8px";
+copyBtn.style.cursor = "pointer";
+copyBtn.style.fontWeight = "600";
+copyBtn.style.background = "linear-gradient(90deg, var(--accent1), var(--accent2))";
+copyBtn.style.color = "#fff";
+
+copyBtn.onclick = () => {
+  navigator.clipboard.writeText(resultText)
+    .then(() => {
+      copyBtn.textContent = "✅ Disalin!";
+      setTimeout(() => copyBtn.textContent = "Salin Teks", 2000);
+    })
+    .catch(() => {
+      alert("Gagal menyalin teks.");
+    });
+};
+
+wrapper.appendChild(copyBtn);
+form.after(wrapper);
       resultBox.id = "resultBox";
       form.after(resultBox);
     } catch (err) {
