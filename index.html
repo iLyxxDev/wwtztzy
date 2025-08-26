@@ -44,23 +44,23 @@
 
     /* Card */
     .card{
-      width:100%;
-      max-width:680px;
-      background:linear-gradient(180deg, rgba(15,24,32,0.9), rgba(19,29,33,0.85));
-      border-radius:var(--card-radius);
-      box-shadow: var(--glass-shadow);
-      padding:36px;
-      position:relative;
-      overflow:visible;
-    }
+  width:100%;
+  max-width:680px;
+  background: rgba(15, 24, 32, 0.55); /* transparan 55% */
+  border-radius:var(--card-radius);
+  box-shadow: var(--glass-shadow);
+  padding:36px;
+  position:relative;
+  overflow:visible;
+  backdrop-filter: blur(10px); /* efek kaca */
+}
 
-    /* subtle inner darker panel */
-    .card-inner{
-      background: linear-gradient(180deg, rgba(24,36,40,0.3), rgba(15,24,32,0.2));
-      border-radius:12px;
-      padding:28px;
-      backdrop-filter: blur(4px);
-    }
+.card-inner{
+  background: rgba(24, 36, 40, 0.35); /* transparan lebih tipis */
+  border-radius:12px;
+  padding:28px;
+  backdrop-filter: blur(6px);
+}
 
     h1{
       margin:0 0 8px 0;
