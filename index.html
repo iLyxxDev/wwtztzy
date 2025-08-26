@@ -227,8 +227,8 @@
 
       // replace placeholder {link} dan {name}
       const resultText = template
-        .replace("{link}", link)
-        .replace("{name}", name);
+        .replaceAll("{link}", link)
+        .replaceAll("{name}", name);
 
       // bikin box hasil
       const resultBox = document.createElement('div');
