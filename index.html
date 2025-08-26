@@ -227,73 +227,67 @@ h1 span{
 
     // tentukan path file sesuai pilihan
     let fileUrl = "";
-    if (choice === "1") fileUrl = "./mt/1.txt";
-    if (choice === "2") fileUrl = "./mt/2.txt";
+if (choice === "1") fileUrl = "./mt/1.txt";
+if (choice === "2") fileUrl = "./mt/2.txt";
 
-    try {
-      // ambil isi template
-      const res = await fetch(fileUrl);
-      let template = await res.text();
+try {
+  const res = await fetch(fileUrl);
+  if (!res.ok) throw new Error("File tidak ditemukan");
+  let template = await res.text();
 
-      // replace placeholder {link} dan {name}
-      const resultText = template
-        .replaceAll("{link}", link)
-        .replaceAll("{name}", name);
-      
-      // bikin box hasil
-const resultBox = document.createElement('div');
-resultBox.style.marginTop = "20px";
-resultBox.style.padding = "14px";
-resultBox.style.borderRadius = "12px";
-resultBox.style.background = "rgba(255,255,255,0.08)";
-resultBox.style.color = "#fff";
-resultBox.style.fontSize = "15px";
-resultBox.style.whiteSpace = "pre-line"; // biar enter/line break ikut
-resultBox.textContent = resultText;
+  const resultText = template
+    .replaceAll("{link}", link)
+    .replaceAll(/{name}/g, name);
 
-// hapus hasil lama kalau ada
-const oldResult = document.getElementById("resultWrapper");
-if(oldResult) oldResult.remove();
+  const resultBox = document.createElement('div');
+  resultBox.style.marginTop = "20px";
+  resultBox.style.padding = "14px";
+  resultBox.style.borderRadius = "12px";
+  resultBox.style.background = "rgba(255,255,255,0.08)";
+  resultBox.style.color = "#fff";
+  resultBox.style.fontSize = "15px";
+  resultBox.style.whiteSpace = "pre-line";
+  resultBox.textContent = resultText;
 
-// wrapper utk teks + tombol
-const wrapper = document.createElement('div');
-wrapper.id = "resultWrapper";
-wrapper.appendChild(resultBox);
+  const oldResult = document.getElementById("resultWrapper");
+  if (oldResult) oldResult.remove();
 
-// tombol salin
-const copyBtn = document.createElement('button');
-copyBtn.textContent = "Salin Teks";
-copyBtn.style.marginTop = "10px";
-copyBtn.style.padding = "10px 14px";
-copyBtn.style.border = "none";
-copyBtn.style.borderRadius = "8px";
-copyBtn.style.cursor = "pointer";
-copyBtn.style.fontWeight = "600";
-copyBtn.style.background = "linear-gradient(90deg, var(--accent1), var(--accent2))";
-copyBtn.style.color = "#fff";
+  const wrapper = document.createElement('div');
+  wrapper.id = "resultWrapper";
+  wrapper.appendChild(resultBox);
 
-copyBtn.onclick = () => {
-  navigator.clipboard.writeText(resultText)
-    .then(() => {
-      copyBtn.textContent = "✅ Disalin!";
-      setTimeout(() => copyBtn.textContent = "Salin Teks", 2000);
-    })
-    .catch(() => {
-      alert("Gagal menyalin teks.");
-    });
-};
+  const copyBtn = document.createElement('button');
+  copyBtn.textContent = "Salin Teks";
+  copyBtn.style.marginTop = "10px";
+  copyBtn.style.padding = "10px 14px";
+  copyBtn.style.border = "none";
+  copyBtn.style.borderRadius = "8px";
+  copyBtn.style.cursor = "pointer";
+  copyBtn.style.fontWeight = "600";
+  copyBtn.style.background = "linear-gradient(90deg, var(--accent1), var(--accent2))";
+  copyBtn.style.color = "#fff";
 
-wrapper.appendChild(copyBtn);
-form.after(wrapper);
-      resultBox.id = "resultBox";
-      form.after(resultBox);
-    } catch (err) {
-      alert("Gagal ambil template: " + err);
-    }
+  copyBtn.onclick = () => {
+    navigator.clipboard.writeText(resultText)
+      .then(() => {
+        copyBtn.textContent = "✅ Disalin!";
+        setTimeout(() => copyBtn.textContent = "Salin Teks", 2000);
+      })
+      .catch(() => {
+        alert("Gagal menyalin teks.");
+      });
+  };
 
-    btn.disabled = false;
-    btn.textContent = 'CREATE MT';
-    form.reset();
+  wrapper.appendChild(copyBtn);
+  form.after(wrapper);
+
+} catch (err) {
+  alert("Gagal ambil template: " + err);
+}
+
+btn.disabled = false;
+btn.textContent = 'CREATE MT';
+form.reset();
   });
   </script>
 </body>
